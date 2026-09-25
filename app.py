@@ -257,8 +257,9 @@ STEPS = [
     "4. Model It: Go Through a Smaller Ratio",
     "5. Model It: A Mixed-Number Multiplier",
     "6. Discuss It & Devon's Error",
-    "7. Project: Mixed-Number Recipe Lab",
-    "8. Practice, Stations & Exit Ticket",
+    "7. Real Life: Part-to-Part ↔ Part-to-Whole",
+    "8. Project: Mixed-Number Recipe Lab",
+    "9. Practice, Stations & Exit Ticket",
 ]
 
 with st.sidebar:
@@ -530,6 +531,146 @@ elif step == 5:
     ask_the_class("Answer D came from adding. Where have we seen that error before this week?")
 
 elif step == 6:
+    box("literacy", "MATH LITERACY: PART-TO-PART, PART-TO-WHOLE, AND CROSSING BETWEEN",
+        "A <b>part-to-part</b> ratio compares one part of a mixture to another part "
+        "(concentrate : water). A <b>part-to-whole</b> ratio compares one part to the "
+        "<b>total</b> (concentrate : whole pitcher). To <b>cross</b> from one to the other:<br>"
+        "&nbsp;&nbsp;part : part &nbsp;<b>a : b</b> &nbsp;→&nbsp; part : whole &nbsp;"
+        "<b>a : (a + b)</b> &nbsp;&nbsp;(add the parts)<br>"
+        "&nbsp;&nbsp;part : whole &nbsp;<b>a : w</b> &nbsp;→&nbsp; part : part &nbsp;"
+        "<b>a : (w − a)</b> &nbsp;&nbsp;(subtract to find the other part)<br>"
+        "Then scale either one with the same multiplier — whole number, fraction, or mixed number.")
+    read_aloud(
+        "Every recipe, every paint color, every bag of concrete on a job site is a ratio of parts. "
+        "But the store sells the whole thing — the pitcher, the gallon, the wheelbarrow. So real "
+        "people constantly cross between part-to-part and part-to-whole. Today you will too, and "
+        "the numbers will not always be whole."
+    )
+
+    CONTEXTS = {
+        "🍋 Lemonade stand": dict(
+            a_name="concentrate", b_name="water", unit="cups", whole_name="pitcher",
+            a=Fraction(3, 2), b=Fraction(9, 2), target=Fraction(10),
+            story="The lemonade recipe uses <b>1&frac12; cups of concentrate for every "
+                  "4&frac12; cups of water</b>. You have a <b>10-cup</b> pitcher to fill.",
+            career="Food service & small business: scaling a recipe to the container you own."),
+        "🧱 Mixing concrete": dict(
+            a_name="cement", b_name="sand", unit="shovels", whole_name="batch",
+            a=Fraction(1), b=Fraction(5, 2), target=Fraction(14),
+            story="A mason mixes <b>1 shovel of cement for every 2&frac12; shovels of sand</b>. "
+                  "The wheelbarrow holds <b>14 shovels</b> total.",
+            career="Construction trades: too little cement and the sidewalk crumbles."),
+        "🎨 Mixing paint": dict(
+            a_name="blue", b_name="yellow", unit="quarts", whole_name="can of green",
+            a=Fraction(9, 4), b=Fraction(3, 4), target=Fraction(5),
+            story="A painter mixes <b>2&frac14; quarts of blue for every &frac34; quart of "
+                  "yellow</b> to get the right green. The client needs <b>5 quarts</b> of green.",
+            career="Art, design & auto body: every repaint has to match the original color."),
+        "💵 Save & spend": dict(
+            a_name="save", b_name="spend", unit="dollars", whole_name="paycheck",
+            a=Fraction(5, 2), b=Fraction(10), target=Fraction(175, 2),
+            story="Jaylen saves <b>$2&frac12; for every $10 he spends</b>. His paycheck is "
+                  "<b>$87&frac12;</b>.",
+            career="Personal finance: a savings ratio is a part-to-whole of every paycheck."),
+        "🏀 Free throws": dict(
+            a_name="made", b_name="missed", unit="shots", whole_name="attempts",
+            a=Fraction(3), b=Fraction(2), target=Fraction(40),
+            story="A guard makes <b>3 free throws for every 2 she misses</b>. At that rate, how "
+                  "many does she make in <b>40 attempts</b>?",
+            career="Sports analytics: a shooting percentage is a part-to-whole ratio."),
+    }
+    pick = st.selectbox("Choose a real-life situation:", list(CONTEXTS), key="d23_rl")
+    c = CONTEXTS[pick]
+    a, b = c["a"], c["b"]
+    whole = a + b
+    box("tools", "THE SITUATION", f"<p style='margin:0'>{c['story']}</p>"
+        f"<p style='margin:6px 0 0 0;font-size:13px'><i>Career connection:</i> {c['career']}</p>")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("**Part-to-part**")
+        st.markdown(f"{c['a_name']} : {c['b_name']} = {m(a)} : {m(b)}")
+    with col2:
+        st.markdown("**Part-to-whole** (add the parts)")
+        st.markdown(f"{c['a_name']} : {c['whole_name']} = {m(a)} : {m(a)} + {m(b)} = "
+                    f"{m(a)} : **{m(whole)}**")
+
+    k = c["target"] / whole
+    st.markdown(f"##### Scale to the {c['whole_name']}: {m(c['target'])} {c['unit']}")
+    st.markdown(f"Scale factor = {m(c['target'])} ÷ {m(whole)} = **{m(k)}**")
+    st.table([
+        {"": "recipe", c["a_name"]: mixed(a), c["b_name"]: mixed(b), c["whole_name"]: mixed(whole)},
+        {"": f"× {mixed(k)}", c["a_name"]: mixed(a * k), c["b_name"]: mixed(b * k),
+         c["whole_name"]: mixed(c["target"])},
+    ])
+    st.caption(f"Check: {mixed(a * k)} + {mixed(b * k)} = {mixed(a * k + b * k)} — the parts "
+               f"still add up to the whole.")
+
+    st.markdown("##### Your turn")
+    guess = st.text_input(f"{c['a_name'].capitalize()} for the {c['whole_name']} — how many {c['unit']}? (e.g. 2 1/2)",
+                          key=f"d23_rl_{pick}")
+    if guess:
+        v = parse_mixed(guess)
+        if v == a * k:
+            st.success(f"Correct — {c['a_name']}: {m(a * k)} {c['unit']}.")
+        elif v == c["target"] * a / b:
+            st.error("That used the part-to-part ratio against the whole. Cross to part-to-whole "
+                     "first: add the parts.")
+        else:
+            st.error("Find the whole of one recipe (add the parts), then the scale factor.")
+
+    st.markdown("---")
+    st.markdown("#### Cross products — is it the same mix?")
+    box("existing", "THE CHECK",
+        "Two ratios <b>a : b</b> and <b>c : d</b> are equivalent exactly when "
+        "<b>a × d = b × c</b>. Use it to decide whether two mixes, written as part-to-part "
+        "<i>or</i> part-to-whole, are really the same.")
+    c1, c2, c3, c4 = st.columns(4)
+    r1a = c1.text_input("Mix 1: part A", "1 1/2", key="d23_x1")
+    r1b = c2.text_input("Mix 1: part B", "4 1/2", key="d23_x2")
+    r2a = c3.text_input("Mix 2: part A", "2", key="d23_x3")
+    r2b = c4.text_input("Mix 2: part B", "6", key="d23_x4")
+    vals = [parse_mixed(x) for x in (r1a, r1b, r2a, r2b)]
+    if all(v is not None and v > 0 for v in vals):
+        p, q, r, s = vals
+        left, right = p * s, q * r
+        st.markdown(f"{m(p)} × {m(s)} = **{m(left)}** &nbsp;&nbsp;&nbsp; "
+                    f"{m(q)} × {m(r)} = **{m(right)}**")
+        if left == right:
+            st.success(f"Equal cross products — same mix. Part-to-whole for both: "
+                       f"{mixed(p)} : {mixed(p + q)} and {mixed(r)} : {mixed(r + s)}.")
+        else:
+            st.error("Different cross products — the mixes taste (or look) different.")
+    else:
+        st.caption("Type positive numbers, fractions, or mixed numbers in all four boxes.")
+
+    st.markdown("##### Which statement is true?")
+    box("tools", "CLASS DATA",
+        "A class has <b>12 girls and 15 boys</b>. Another class has <b>8 girls out of 18 "
+        "students</b>.")
+    ch = st.radio("Pick one:", [
+        "A — In the first class, 12 : 15 is a part-to-whole ratio.",
+        "B — The first class's girls-to-whole ratio is 4 : 5.",
+        "C — The second class's girls-to-boys ratio is 4 : 9.",
+        "D — Both classes have a girls-to-whole ratio of 4 : 9.",
+    ], index=None, key="d23_cls")
+    if st.button("Check", key="d23_cls_chk"):
+        if ch and ch.startswith("D"):
+            st.success("Correct. First class: 12 : (12 + 15) = 12 : 27 = 4 : 9. Second class: "
+                       "8 : 18 = 4 : 9. Cross products agree: 12 × 18 = 216 = 27 × 8. "
+                       "Bonus: cross back to part-to-part — 12 : 15 and 8 : 10 are both 4 : 5.")
+        elif ch and ch.startswith("A"):
+            st.error("12 : 15 is girls to boys — part-to-part. The whole is 12 + 15 = 27.")
+        elif ch and ch.startswith("B"):
+            st.error("4 : 5 is girls to boys (12 : 15 simplified). Girls to whole is 12 : 27.")
+        elif ch and ch.startswith("C"):
+            st.error("8 : 18 is girls to the whole class. Girls to boys is 8 : (18 − 8) = 8 : 10.")
+        else:
+            st.warning("Pick an answer first.")
+    ask_the_class("Where in your own life do you see a ratio of parts, but pay for or use the "
+                  "whole? Name the parts and the whole.")
+
+elif step == 7:
     read_aloud(
         "Recipe Lab. Your team runs a smoothie stand. The house recipe is one and a half cups of "
         "mango for every three quarters of a cup of yogurt. Customers order in different sizes, "
@@ -594,7 +735,7 @@ elif step == 6:
     ask_the_class("Order 5 used a scale factor less than 1. Did anyone's recipe get smaller? "
                   "How did your team know before measuring?")
 
-elif step == 7:
+elif step == 8:
     st.markdown("#### Engage / Explore / Enrich stations")
     tabs = st.tabs(["Engage (all)", "Explore (on-level)", "Enrich (extend)"])
     with tabs[0]:
@@ -675,7 +816,7 @@ if c_next.button("Next ➡", disabled=(step == len(STEPS) - 1)):
     st.session_state.step = min(len(STEPS) - 1, step + 1)
     st.rerun()
 
-st.caption("Standards in play: 6.RP.A.3 (use ratio and rate reasoning to solve problems) · "
+st.caption("Standards in play: 6.RP.A.1 (part-to-part & part-to-whole) · 6.RP.A.3 (use ratio and rate reasoning to solve problems) · "
            "6.RP.A.3a (make tables of equivalent ratios; find missing values) · "
            "6.NS.A.1 / 5.NF.B.4 (multiplying by fractions and mixed numbers).")
 st.markdown(

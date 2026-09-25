@@ -7,7 +7,7 @@ Streamlit lesson app for a 55-minute period, in the same structure as the Day 22
 
 **i-Ready alignment:** Lesson 13, Session 4 — Develop: Using Equivalent Ratios (SB pp. 297-302)
 
-**Standards:** 6.RP.A.3 (use ratio and rate reasoning to solve problems) · 6.RP.A.3a (make tables of equivalent ratios; find missing values) · 6.NS.A.1 / 5.NF.B.4 (multiplying by fractions and mixed numbers).
+**Standards:** 6.RP.A.1 (part-to-part and part-to-whole ratio language) · 6.RP.A.3 (use ratio and rate reasoning to solve problems) · 6.RP.A.3a (make tables of equivalent ratios; find missing values) · 6.NS.A.1 / 5.NF.B.4 (multiplying by fractions and mixed numbers).
 
 ## Roadmap
 
@@ -17,8 +17,15 @@ Streamlit lesson app for a 55-minute period, in the same structure as the Day 22
 4. Model It: Go Through a Smaller Ratio
 5. Model It: A Mixed-Number Multiplier (scale factor 2½, trail mix, shampoo)
 6. Discuss It & Devon's Error (4 × 2½ ≠ 8½) · Apply It: the baker
-7. Project: Mixed-Number Recipe Lab
-8. Practice, Stations & Exit Ticket (the 56-floor skyscraper)
+7. Real Life: Part-to-Part ↔ Part-to-Whole (lemonade, concrete, paint, savings, free throws; crossing between the two forms; cross-product check)
+8. Project: Mixed-Number Recipe Lab
+9. Practice, Stations & Exit Ticket (the 56-floor skyscraper)
+
+## Printables (in the launcher repo's `static/`)
+
+- `Day23_Observer_Guide.pdf`
+- `Day23_wksht.pdf`
+- `Anchor_Chart_Part_to_Part_and_Part_to_Whole.pdf`
 
 ## Run locally
 
